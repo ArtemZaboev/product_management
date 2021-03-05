@@ -13,24 +13,24 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Currency {
+public class Language {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @NonNull
     private String name;
 
-    public Currency(String name) {
+    public Language(String name) {
         this.name=name;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Currency)) return false;
-        Currency currency = (Currency) o;
-        return id == currency.id &&
-                name.equals(currency.name);
+        if (!(o instanceof Language)) return false;
+        Language language = (Language) o;
+        return id == language.id &&
+                name.equals(language.name);
     }
 
     @Override

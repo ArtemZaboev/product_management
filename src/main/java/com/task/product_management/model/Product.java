@@ -2,45 +2,62 @@ package com.task.product_management.model;
 
 import lombok.*;
 
-import java.math.BigDecimal;
+import javax.persistence.*;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @NonNull
-    private String name;
-    private String description;
+    @OneToMany(mappedBy = "product")
+    private Set<NameDescription> name_description=new HashSet<>();
 
-    private BigDecimal price;
+    @NonNull
+    @OneToMany(mappedBy = "product" )
+    private Set <Price> prices=new HashSet<>();
+    @NonNull
     private Instant createDate;
+    @NonNull
     private Instant updateDate;
 
-    public Product(String name, String description, BigDecimal price, Instant createDate) {
-        this.name = name;
-        this.description = description;
-        this.price = price;
+    public Product(Set<NameDescription> name_description, Set<Price> prices, Instant createDate, Instant updateDate) {
+        this.name_description=name_description;
+        this.prices = prices;
         this.createDate = createDate;
+        this.updateDate=updateDate;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Product)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
         return id == product.id &&
-                name.equals(product.name) &&
-                description.equals(product.description) &&
-                price.equals(product.price) &&
-                Objects.equals(createDate,product.createDate) &&
-                Objects.equals(updateDate, product.updateDate);
+                name_description.equals(product.name_description) &&
+                prices.equals(product.prices) &&
+                createDate.equals(product.createDate) &&
+                updateDate.equals(product.updateDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, price, createDate, updateDate);
+        return Objects.hash(id, name_description, prices, createDate, updateDate);
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", createDate=" + createDate +
+                ", updateDate=" + updateDate +
+                '}';
     }
 }
