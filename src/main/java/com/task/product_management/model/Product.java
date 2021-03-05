@@ -18,7 +18,7 @@ public class Product {
     private long id;
     @NonNull
     @OneToMany(mappedBy = "product")
-    private Set<NameDescription> name_description=new HashSet<>();
+    private Set<NameAndDescription> name_description=new HashSet<>();
 
     @NonNull
     @OneToMany(mappedBy = "product" )
@@ -28,12 +28,19 @@ public class Product {
     @NonNull
     private Instant updateDate;
 
-    public Product(Set<NameDescription> name_description, Set<Price> prices, Instant createDate, Instant updateDate) {
+    public Product(Set<NameAndDescription> name_description, Set<Price> prices, Instant createDate, Instant updateDate) {
         this.name_description=name_description;
         this.prices = prices;
         this.createDate = createDate;
         this.updateDate=updateDate;
     }
+    public Product(Instant createDate, Instant updateDate){
+        this.name_description=name_description;
+        this.prices = prices;
+        this.createDate = createDate;
+        this.updateDate=updateDate;
+    }
+
 
     @Override
     public boolean equals(Object o) {

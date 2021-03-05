@@ -10,7 +10,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class NameDescription {
+public class NameAndDescription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -27,7 +27,7 @@ public class NameDescription {
 
     private String description;
 
-    public NameDescription(Product product,Language language, String name, String description) {
+    public NameAndDescription(Product product,Language language, String name, String description) {
         this.product=product;
         this.language=language;
         this.name=name;
@@ -37,8 +37,8 @@ public class NameDescription {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof NameDescription)) return false;
-        NameDescription that = (NameDescription) o;
+        if (!(o instanceof NameAndDescription)) return false;
+        NameAndDescription that = (NameAndDescription) o;
         return id == that.id &&
                 product.equals(that.product) &&
                 language.equals(that.language) &&
