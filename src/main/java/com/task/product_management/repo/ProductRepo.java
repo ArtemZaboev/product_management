@@ -14,6 +14,7 @@ import java.util.List;
 public interface ProductRepo extends PagingAndSortingRepository<Product,Long> {
 
     Page<Product> findAll();
+    List<Product> getAll();
     Product getProductById(long id);
     Product save(Product product);
     void deleteById(Long id);

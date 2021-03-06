@@ -1,6 +1,9 @@
 package com.task.product_management.model;
 
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -16,29 +19,37 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @NonNull
-    @OneToMany(mappedBy = "product")
-    private Set<NameAndDescription> name_description=new HashSet<>();
 
     @NonNull
-    @OneToMany(mappedBy = "product" )
-    private Set <Price> prices=new HashSet<>();
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(FetchMode.SUBSELECT)
+//    @Fetch(FetchMode.SELECT)
+//    @BatchSize(size = 10)
+    private Set<NameAndDescription> name_description;
+
+    @NonNull
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(FetchMode.SUBSELECT)
+//    @Fetch(FetchMode.SELECT)
+//    @BatchSize(size = 10)
+    private Set<Price> prices;
+
     @NonNull
     private Instant createDate;
+
     @NonNull
     private Instant updateDate;
 
     public Product(Set<NameAndDescription> name_description, Set<Price> prices, Instant createDate, Instant updateDate) {
-        this.name_description=name_description;
+        this.name_description = name_description;
         this.prices = prices;
         this.createDate = createDate;
-        this.updateDate=updateDate;
+        this.updateDate = updateDate;
     }
-    public Product(Instant createDate, Instant updateDate){
-        this.name_description=name_description;
-        this.prices = prices;
+
+    public Product(Instant createDate, Instant updateDate) {
         this.createDate = createDate;
-        this.updateDate=updateDate;
+        this.updateDate = updateDate;
     }
 
 

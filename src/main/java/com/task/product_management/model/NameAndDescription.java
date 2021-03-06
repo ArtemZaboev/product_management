@@ -6,41 +6,34 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@IdClass(NameAndDescriptionId.class)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 public class NameAndDescription {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
 
+    @Id
     @ManyToOne
-    @JoinColumn(name = "product_id",referencedColumnName = "id")
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
-    @OneToOne
+    @Id
+    @OneToOne(fetch = FetchType.EAGER)
     @NonNull
     private Language language;
+
     @NonNull
     private String name;
 
     private String description;
-
-    public NameAndDescription(Product product,Language language, String name, String description) {
-        this.product=product;
-        this.language=language;
-        this.name=name;
-        this.description=description;
-    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof NameAndDescription)) return false;
         NameAndDescription that = (NameAndDescription) o;
-        return id == that.id &&
-                product.equals(that.product) &&
+        return product.equals(that.product) &&
                 language.equals(that.language) &&
                 name.equals(that.name) &&
                 Objects.equals(description, that.description);
@@ -48,6 +41,6 @@ public class NameAndDescription {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, product, language, name, description);
+        return Objects.hash(product, language, name, description);
     }
 }

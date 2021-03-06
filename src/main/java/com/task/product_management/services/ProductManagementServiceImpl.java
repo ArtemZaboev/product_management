@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Service
@@ -51,7 +52,7 @@ public class ProductManagementServiceImpl implements ProductManagementService {
             log.info("There are no prices for product");
             //изменить исключение!!!!!!!
             throw new TestException();
-        } else if (!(checkPrices(product.getPrices()) || checkNameAndDescriptions(product.getName_description()))){
+        } else if (!(checkPrices(product.getPrices()) || checkNameAndDescriptions(product.getName_description()))) {
             //изменить исключение!!!!!!!
             throw new TestException();
         }
@@ -63,7 +64,7 @@ public class ProductManagementServiceImpl implements ProductManagementService {
 
     @Override
     public void deleteProduct(long id) {
-
+        productRepo.deleteById(id);
     }
 
     @Override
@@ -74,21 +75,35 @@ public class ProductManagementServiceImpl implements ProductManagementService {
 
     @Override
     public List<Product> getProducts() {
-        return null;
+        List<Product> products;
+        try {
+            //мб Pages нужно сделать
+            products = Objects.requireNonNull(productRepo.getAll());
+        } catch (NullPointerException e) {
+            throw new TestException();
+        }
+        return products;
     }
 
     @Override
     public Product getProductById(long id) {
-        return null;
+        Product product;
+        try{
+            //хз
+            product=Objects.requireNonNull(productRepo.getProductById(id));
+        }catch (NullPointerException e){
+            throw new TestException();
+        }
+        return product;
     }
 
-    public boolean checkPrices(Set<Price> prices){
-        for (Price price:prices){
+    public boolean checkPrices(Set<Price> prices) {
+        for (Price price : prices) {
             String currencyName = price.getCurrency().getName();
             if (!currencyService.currencyExistsByName(currencyName)) {
                 log.info("Currency {} doesn't exist", currencyName);
                 return false;
-            }else if (price.getValue().equals(BigDecimal.ZERO)){
+            } else if (price.getValue().equals(BigDecimal.ZERO)) {
                 log.info("Price value can't be equal zero.");
                 return false;
             }
@@ -96,13 +111,13 @@ public class ProductManagementServiceImpl implements ProductManagementService {
         return true;
     }
 
-    public boolean checkNameAndDescriptions(Set<NameAndDescription> nameAndDescriptionSet){
-        for (NameAndDescription nameAndDescription:nameAndDescriptionSet){
-             String languageName = nameAndDescription.getLanguage().getName();
+    public boolean checkNameAndDescriptions(Set<NameAndDescription> nameAndDescriptionSet) {
+        for (NameAndDescription nameAndDescription : nameAndDescriptionSet) {
+            String languageName = nameAndDescription.getLanguage().getName();
             if (!languageService.languageExistsByName(languageName)) {
                 log.info("Language {} doesn't exist", languageName);
                 return false;
-            }else if (nameAndDescription.getName().isEmpty()){
+            } else if (nameAndDescription.getName().isEmpty()) {
                 log.info("Product name can't be empty");
             }
         }
