@@ -1,5 +1,7 @@
 package com.task.product_management.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -8,10 +10,10 @@ import java.util.Objects;
 
 @Entity
 @IdClass(PriceId.class)
+@Table(name = "prices")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class Price {
 
     @Id
@@ -23,7 +25,8 @@ public class Price {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "product_id",referencedColumnName = "id")
+    @JoinColumn(name = "product_id")
+    @JsonBackReference
     private Product product;
 
     @Override
@@ -33,11 +36,20 @@ public class Price {
         Price price = (Price) o;
         return currency.equals(price.currency) &&
                 value.equals(price.value) &&
-                product.equals(price.product);
+                product.getId() == price.product.getId();
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(currency, value, product);
+    }
+
+    @Override
+    public String toString() {
+        return "Price{" +
+                "currency=" + currency+
+                ", value=" + value +
+                ", product=" + product.getId() +
+                '}';
     }
 }

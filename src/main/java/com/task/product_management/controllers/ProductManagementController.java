@@ -36,8 +36,8 @@ public class ProductManagementController {
     }
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createProduct(@RequestBody Product product) {
-        productManagementService.saveProduct(product);
+    public Product createProduct(@RequestBody Product product) {
+        return productManagementService.saveProduct(product);
 
     }
 

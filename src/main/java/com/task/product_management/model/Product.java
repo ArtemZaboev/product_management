@@ -1,17 +1,19 @@
 package com.task.product_management.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
-import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.HashSet;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
+@Table(name = "products")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,27 +22,31 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NonNull
+//    @NonNull
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(FetchMode.SUBSELECT)
+    @JsonManagedReference
 //    @Fetch(FetchMode.SELECT)
 //    @BatchSize(size = 10)
-    private Set<NameAndDescription> name_description;
+    private List<NameAndDescription> name_description;
 
-    @NonNull
+//    @NonNull
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(FetchMode.SUBSELECT)
+    @JsonManagedReference
 //    @Fetch(FetchMode.SELECT)
 //    @BatchSize(size = 10)
-    private Set<Price> prices;
+    private List<Price> prices;
 
     @NonNull
+    @Column(name = "create_data")
     private Instant createDate;
 
     @NonNull
+    @Column(name = "update_data")
     private Instant updateDate;
 
-    public Product(Set<NameAndDescription> name_description, Set<Price> prices, Instant createDate, Instant updateDate) {
+    public Product(List<NameAndDescription> name_description, List<Price> prices, Instant createDate, Instant updateDate) {
         this.name_description = name_description;
         this.prices = prices;
         this.createDate = createDate;
@@ -74,6 +80,8 @@ public class Product {
     public String toString() {
         return "Product{" +
                 "id=" + id +
+                ", name_description=" + name_description+
+                ", prices=" + prices +
                 ", createDate=" + createDate +
                 ", updateDate=" + updateDate +
                 '}';

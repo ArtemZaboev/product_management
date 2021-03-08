@@ -5,9 +5,9 @@ import com.task.product_management.model.Product;
 import java.util.List;
 
 public interface ProductManagementService {
-    void saveProduct(Product product);
+    Product saveProduct(Product product);
     void deleteProduct(long id);
-    void updateProduct(Product product);
+    Product updateProduct(Product product);
     List<Product> getProducts();
     Product getProductById(long id);
 
